@@ -33,9 +33,10 @@ def demoUrlFor():
     returnString += "url for findByIdUser " + url_for('findByIdUser', id=12)
     return returnString
 
-@app.route("/demo_request", methods=['POST', 'GET', 'DELETE'])
+@app.route("/demo_request", methods=['POST', 'GET', 'DELETE', 'PUT'])
 def demoRequest():
-    return request.method
+    returnString = "The chosen option is " + request.method 
+    return returnString
 
 
 if __name__ == '__main__' :
