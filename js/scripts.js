@@ -1,6 +1,7 @@
+host = window.location.origin
 function GetMovie(){
     $.ajax({
-        "url" : "http://127.0.0.1:5000/demo_request",
+        "url" : host + "/demo_request",
         "method": "GET",
         "data": "",
         "dataType" : "HTML",
@@ -15,7 +16,7 @@ function GetMovie(){
 
 function NewMovie(){
     $.ajax({
-        "url" : "http://127.0.0.1:5000/demo_request",
+        "url" : host + "/demo_request",
         "method": "POST",
         "data": "",
         "dataType" : "HTML",
@@ -30,7 +31,7 @@ function NewMovie(){
 
 function EditMovie(){
     $.ajax({
-        "url" : "http://127.0.0.1:5000/demo_request",
+        "url" : host + "/demo_request",
         "method": "PUT",
         "data": "",
         "dataType" : "HTML",
@@ -45,7 +46,7 @@ function EditMovie(){
 
 function DeleteMovie(){
     $.ajax({
-        "url" : "http://127.0.0.1:5000/demo_request",
+        "url" : host + "/demo_request",
         "method": "DELETE",
         "data": "",
         "dataType" : "HTML",
