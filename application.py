@@ -1,17 +1,52 @@
 #!flask/bin/python
-from flask.helpers import url_for,  request
-from flask import Flask, redirect, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
+import re
 
-app = Flask(__name__, static_url_path='', static_folder='.', template_folder='templates_folder')
+app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return redirect(url_for('start'))
+app.secret_key = 'your secret key'
+  
+  
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'datarepresentation'
 
-@app.route('/start')
-def start():
+mysql = MySQL(app)
+
+#@app.route('/')
+
+#def index():
+#    return redirect(url_for('start'))
+
+#@app.route('/start')
+#def start():
     #return "Hello, World! This is changed"
-    return render_template('index.html')
+#    return render_template('index.html')
+
+# Creating login for application
+@app.route('/')
+@app.route('/login', methods =['GET', 'POST'])
+def login():
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM loginprofile WHERE username = % s AND password = % s', (username, password, ))
+        account = cursor.fetchone()
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            msg = 'Logged in successfully !'
+            return render_template('index.html', msg = msg)
+        else:
+            msg = 'Incorrect username / password !'
+    return render_template('login.html', msg = msg)
+
 
 
 @app.route('/book/<int:id>')

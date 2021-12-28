@@ -1,4 +1,21 @@
 host = window.location.origin
+/*
+function login(){
+    $.ajax({
+        "url" : host + "/login",
+        "method" : "POST",
+        "data" : "",
+        "dataType" : "HTML",
+        "success" : function (result) {
+            console.log(result);
+        },
+        "error": function (xhr, status, error) {
+            console.log("error: " + status + " msg:" + error); 
+        }
+    });
+}
+
+*/
 function GetMovie(){
     $.ajax({
         "url" : host + "/demo_request",
