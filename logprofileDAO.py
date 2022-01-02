@@ -25,7 +25,7 @@ class LogProfileDAO:
 
     def getAll(self):
         cursor = self.db.cursor()
-        sql="select id, username, email from loginprofile"
+        sql="select * from loginprofile"
         cursor.execute(sql)
         results = cursor.fetchall()
         returnArray = []
@@ -65,10 +65,10 @@ class LogProfileDAO:
 
     def update(self, profile):
         cursor = self.db.cursor()
-        sql="update loginprofile set username= %s, email=%s  where id = %s"
+        sql="update loginprofile set username= %s, password=%s, email=%s  where id = %s"
         values = [
             profile['username'],
-            #profile['password'],
+            profile['password'],
             profile['email'],
             profile['id']
         ]
@@ -85,7 +85,7 @@ class LogProfileDAO:
         return {}
 
     def convertToDictionary(self, result):
-        colnames=['id','username','email']
+        colnames=['id','username','password','email']
         item = {}
         
         if result:

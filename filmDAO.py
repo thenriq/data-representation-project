@@ -44,6 +44,28 @@ class FilmDAO:
        cursor.execute(sql, values)
        result = cursor.fetchone()
        return self.convertToDictionary(result)
+   
+    def update(self, films):
+         cursor = self.db.cursor()
+         sql="update films set movie_name= %s, movie_gender=%s, movie_year=%s, movie_box_office=%s  where id = %s"
+         values = [
+             films['movie_name'],
+             films['movie_gender'],
+             films['movie_year'],
+             films['movie_box_office'],
+             films['id']
+         ]
+         cursor.execute(sql, values)
+         self.db.commit()
+         return films
+     
+    def delete(self, id):
+       cursor = self.db.cursor()
+       sql="delete from films where id = %s"
+       values = [id]
+       cursor.execute(sql, values)
+
+       return {}
     
     def convertToDictionary(self, result):
         colnames=['id','movie_name','movie_gender','movie_year','movie_box_office']

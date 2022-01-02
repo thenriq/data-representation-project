@@ -25,24 +25,28 @@
                 <td>Email</td>
                 <td><input type="text" name="email"></td>
             </tr>
+
+            <tr>
+                <td>Password</td>
+                <td><input type="text" name="password"></td>
+            </tr>
            <tr>
                 <td></td><td>
                     <button id="create-button" onclick="doCreate()">Create</button>
                     <button id="update-button" onclick="doUpdate()">Update</button>
                 </td>
             </tr>
+            
         </table>
     </div>
+    
     <div id="display">
-        
-
         <h2>Profiles </h2>
         <button onclick="showCreate()">Create</button>
         <table id="profileTable" class="table">
             <tr>
-                <th>ID</th><th>Username</th><th>Email</th><th></th><th></th>
+                <th>ID</th><th>Username</th><th>Email</th><th>Password</th><th></th>
             </tr>
-            
         </table>
     </div>
 
@@ -79,6 +83,7 @@
             profile.id = rowElement.getAttribute("id");
             profile.username = rowElement.cells[1].firstChild.textContent
             profile.email = rowElement.cells[2].firstChild.textContent 
+            profile.password = rowElement.cells[3].firstChild.textContent
             
             return profile
             
@@ -92,7 +97,7 @@
 
             form.querySelector('input[name="username"]').value = profile.username
             form.querySelector('input[name="email"]').value = profile.email
-            //form.querySelector('input[name="password"]').value = profile.password
+            form.querySelector('input[name="password"]').value = profile.password
         }
 
         function clearForm(){
@@ -178,7 +183,7 @@
         function updateTableRow(profile){
             rowElem = document.getElementById(profile.id)
             rowElem.cells[1].firstChild.textContent = profile.username
-            //rowElem.cells[2].firstChild.textContent = profile.password
+            rowElem.cells[2].firstChild.textContent = profile.password
             rowElem.cells[2].firstChild.textContent = profile.email
             
             console.log("updating table")
@@ -192,7 +197,7 @@
             var profile =  {}
             profile.id = form.querySelector('input[name="id"]').value
             profile.username = form.querySelector('input[name="username"]').value
-            //profile.password = form.querySelector('input[name="password"]').value
+            profile.password = form.querySelector('input[name="password"]').value
             profile.email = form.querySelector('input[name="email"]').value
             console.log(profile)
             return profile
@@ -203,7 +208,7 @@
             document.getElementById('create-update').style.display = "none"
         }
 
-        function populateTable(){
+        function  populateTable(){
             //ajax getAll
            
             $.ajax({
@@ -235,9 +240,16 @@
             cell3 = rowElem.insertCell(2)
             cell3.innerHTML = profile.email
             cell4 = rowElem.insertCell(3)
-            cell4.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+            cell4.innerHTML = profile.password
+           
+            
+            
+            
+            
             cell5 = rowElem.insertCell(4)
-            cell5.innerHTML = '<button onclick="doDelete(this)">Delete</button>' 
+            cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+            cell6 = rowElem.insertCell(5)
+            cell6.innerHTML = '<button onclick="doDelete(this)">Delete</button>' 
         }
         populateTable()
     </script>

@@ -23,6 +23,12 @@ mysql = MySQL(app)
 #    return "hello GMIT"
 
 # Login page
+@app.route("/index")
+def index():
+    if 'loggedin' in session: 
+        return render_template("index.html")
+    return redirect(url_for('login'))
+
 @app.route('/')
 @app.route('/login', methods =['GET', 'POST'])
 def login():
@@ -43,6 +49,13 @@ def login():
             msg = 'Incorrect username / password !'
     return render_template('login.html', msg = msg)
 
+# Logout
+@app.route('/logout')
+def logout():
+   session.pop('loggedin', None)
+   session.pop('id', None)
+   session.pop('username', None)
+   return redirect(url_for('login'))
 
 # Calls profiles page to open
 @app.route("/profiles")
@@ -52,11 +65,20 @@ def profiles():
     return redirect(url_for('login'))
 
 # Calls films page to open
-@app.route("/film")
+@app.route("/films")
 def fimls():
     if 'loggedin' in session: 
         return render_template("films.html")
     return redirect(url_for('login'))
+
+# Load css on page
+@app.route("/profiles")
+def cssfile():
+    if 'loggedin' in session: 
+        return render_template("profiles.html")
+    return redirect(url_for('login'))
+
+
 
 # --------- Access to DB - PROFILE --------------------------------------------------------------
 # Get all - PROFILE
@@ -65,9 +87,9 @@ def getAll():
     return jsonify(logprofileDAO.getAll())
 
 # Get passwd by ID
-#@app.route('/passwd/<int:id>')
-#def getPasswd(id):
-#    return  jsonify(logprofileDAO.getPass(id))
+@app.route('/passwd/<int:id>')
+def getPasswd(id):
+    return  jsonify(logprofileDAO.getPass(id))
 
 # find by id - PROFILE
 @app.route('/profile/<int:id>')
@@ -122,19 +144,19 @@ def delete(id):
 
 # --------- Access to DB - FILMS ------------------------------------------------
 # Get all - FILMS
-@app.route('/films')
+@app.route('/film')
 def getAllFilms():
     return jsonify(filmDAO.getAll())
 
 
 # find by id - FILMS
-@app.route('/films/<int:id>')
+@app.route('/film/<int:id>')
 def findByIdFILM(id):
     return jsonify(filmDAO.findByID(id))
 
 
-# Create - PROFILE
-@app.route('/films', methods=['POST'])
+# Create - FILMS
+@app.route('/film', methods=['POST'])
 def createFilm():
     
     if not request.json:
@@ -142,16 +164,16 @@ def createFilm():
     
     film = {
         #"id": request.json["id"], --> for auto-increment table this will not be used
-        "movie_name": request.json["movie_name"],
-        "movie_gender": request.json["movie_gender"],
-        "movie_year": request.json["movie_year"],
-        "movie_box_office": request.json["movie_box_office"]
+        'movie_name': request.json['movie_name'],
+        'movie_gender': request.json['movie_gender'],
+        'movie_year': request.json['movie_year'],
+        'movie_box_office': request.json['movie_box_office']
     }
     return jsonify(filmDAO.create(film))
 
 #UPDATE by ID: - PROFILE
-@app.route('/films/<int:id>', methods=['PUT'])
-def update_film(id):
+@app.route('/film/<int:id>', methods=['PUT'])
+def updatefilm(id):
     foundFilm = filmDAO.findByID(id)
     print(foundFilm)
     if foundFilm == {}:
@@ -170,10 +192,18 @@ def update_film(id):
     if 'movie_box_office' in request.json:
         currentFilm['movie_box_office'] = request.json['movie_box_office']
     
-    logprofileDAO.update(currentFilm)
+    filmDAO.update(currentFilm)
   
     
     return jsonify(currentFilm)
+#    return jsonify({})
+
+#DELETE: - FILM
+@app.route('/film/<int:id>', methods=['DELETE'])
+def deleteFilm(id):
+    filmDAO.delete(id)
+    
+    return jsonify({"done":True})
 
 if __name__ == '__main__' :
     app.run(debug = True)
