@@ -35,21 +35,40 @@ class LogProfileDAO:
             returnArray.append(resultAsDict)
 
         return returnArray
+    
 
     def findByID(self, id):
         cursor = self.db.cursor()
-        sql="select id, username, email from loginprofile where id = %s"
+        sql="select * from loginprofile where id = %s"
         values = [id]
         cursor.execute(sql, values)
         result = cursor.fetchone()
         return self.convertToDictionary(result)
+    
+    def getPass(self, id):
+        cursor = self.db.cursor()
+        sql="select password from loginprofile where id = %s"
+        values = [id]
+        cursor.execute(sql, values)
+        result = cursor.fetchone()
+        return self.convertToDictionaryPass(result)
+    
+    def checkLogged(self,id):
+        cursor = self.db.cursor()
+        sql="select* from loginprofile where username = %s and password = %s"
+        values = [id]
+        cursor.execute(sql,values)
+        result = cursor.fetchone()
+       
+        
+        return self.convertToDictionary(result)
 
     def update(self, profile):
         cursor = self.db.cursor()
-        sql="update loginprofile set username= %s, password=%s, email=%s  where id = %s"
+        sql="update loginprofile set username= %s, email=%s  where id = %s"
         values = [
             profile['username'],
-            profile['password'],
+            #profile['password'],
             profile['email'],
             profile['id']
         ]
@@ -67,6 +86,17 @@ class LogProfileDAO:
 
     def convertToDictionary(self, result):
         colnames=['id','username','email']
+        item = {}
+        
+        if result:
+            for i, colName in enumerate(colnames):
+                value = result[i]
+                item[colName] = value
+        
+        return item
+    
+    def convertToDictionaryPass(self, result):
+        colnames=['password']
         item = {}
         
         if result:

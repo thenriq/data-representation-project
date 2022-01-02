@@ -1,0 +1,245 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div id="create-update" style="display:none">
+        <h2>create-edit</h2>
+        <table id="createUpdateForm">
+            <tr>
+                <td>ID</td>
+                <td><input type="text" name="id" id="idInput"></td>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" name="username"></td>
+            </tr>
+            
+            <tr>
+                <td>Email</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+           <tr>
+                <td></td><td>
+                    <button id="create-button" onclick="doCreate()">Create</button>
+                    <button id="update-button" onclick="doUpdate()">Update</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="display">
+        
+
+        <h2>Profiles </h2>
+        <button onclick="showCreate()">Create</button>
+        <table id="profileTable" class="table">
+            <tr>
+                <th>ID</th><th>Username</th><th>Email</th><th></th><th></th>
+            </tr>
+            
+        </table>
+    </div>
+
+    <script>
+        function showCreate(){
+            document.getElementById('display').style.display = "none"
+            document.getElementById('update-button').style.display = "none"
+            document.getElementById('create-button').style.display = "block"
+            document.getElementById('create-update').style.display = "block"
+        }
+
+        function showUpdate(thisElem){
+            var rowElem = thisElem.parentNode.parentNode;
+            console.log(rowElem)
+            profile = readProfileFromRow(rowElem)
+            populateForm(profile)
+            //id = rowElement.getAttribute("id");
+            //profile = readProfileFromRow(rowElement)
+            //populateForm(profile)
+
+            //document.getElementById("id").value = id
+            //document.getElementById("id").disabled = true
+
+            document.getElementById('display').style.display = "none"
+            document.getElementById('update-button').style.display = "block"
+            document.getElementById('create-button').style.display = "none"
+            document.getElementById('create-update').style.display = "block"
+        }
+
+        function readProfileFromRow(rowElement){
+            //id = rowElement.getAttribute("id");
+            
+            profile = {}
+            profile.id = rowElement.getAttribute("id");
+            profile.username = rowElement.cells[1].firstChild.textContent
+            profile.email = rowElement.cells[2].firstChild.textContent 
+            
+            return profile
+            
+        }
+
+        function populateForm(profile){
+            var form = document.getElementById('createUpdateForm')
+
+            form.querySelector('input[name="id"]').value = profile.id
+            form.querySelector('input[name="id"]').disabled = true
+
+            form.querySelector('input[name="username"]').value = profile.username
+            form.querySelector('input[name="email"]').value = profile.email
+            //form.querySelector('input[name="password"]').value = profile.password
+        }
+
+        function clearForm(){
+            var form = document.getElementById('createUpdateForm')
+
+            form.querySelector('input[name="id"]').value = ''
+            form.querySelector('input[name="id"]').disabled = false
+            form.querySelector('input[name="username"]').value = ''
+            form.querySelector('input[name="email"]').value = ''
+        }
+
+        function doCreate(){
+            console.log("in doCreate")
+            profile = getProfileFromForm()
+            $.ajax({
+                url:"/profile",
+                data:JSON.stringify(profile),
+                method:"POST",
+                dataType:"JSON",
+                contentType: "application/json; charset=utf-8",
+                success:function(results){
+                    console.log(results)
+                    addProfileToTable(profile)
+                    showDisplay()
+                    clearForm()
+                },
+                error:function(xhr,status,error){
+                    console.log("error"+error)
+                }
+            })
+            //showDisplay()
+        }
+
+        function doUpdate(){
+            profile = getProfileFromForm()
+            updateServer(profile)
+            updateTableRow(profile)
+            showDisplay()
+            
+        }
+
+        function updateServer(profile){
+            $.ajax({
+                url:'/profile/'+profile.id,
+                data:JSON.stringify(profile),
+                method:"PUT",
+                dataType:"JSON",
+                contentType: "application/json; charset=utf-8",
+                success:function(result){
+                    console.log(result)
+                    updateTableRow(profile)
+                    showDisplay()
+                    clearForm()
+                },
+                error:function(xhr,status,error){
+                    console.log("error"+error)
+                    console.log("data result: ",data)
+                }
+            })
+            console.log(profile.username,profile.email, profile.id)
+            addProfileToTable
+        }
+        function doDelete(thisElem){
+            var tableElement = document.getElementById('profileTable');
+            var rowElem = thisElem.parentNode.parentNode;
+            var index = rowElem.rowIndex;
+            id = rowElem.getAttribute("ID");
+            $.ajax({
+                url:"/profile/"+id,
+                method:"DELETE",
+                dateType:"JSON",
+                success:function(result){
+                    tableElement.deleteRow(index);
+                },
+                error:function(xhr,status,error){
+                    console.log(error)
+                }
+            })
+            
+
+        }
+
+        function updateTableRow(profile){
+            rowElem = document.getElementById(profile.id)
+            rowElem.cells[1].firstChild.textContent = profile.username
+            //rowElem.cells[2].firstChild.textContent = profile.password
+            rowElem.cells[2].firstChild.textContent = profile.email
+            
+            console.log("updating table")
+        }
+
+        function getProfileFromForm(){
+            console.log("in doCreate")
+            
+            var form = document.getElementById('createUpdateForm')
+            
+            var profile =  {}
+            profile.id = form.querySelector('input[name="id"]').value
+            profile.username = form.querySelector('input[name="username"]').value
+            //profile.password = form.querySelector('input[name="password"]').value
+            profile.email = form.querySelector('input[name="email"]').value
+            console.log(profile)
+            return profile
+        }
+
+        function showDisplay(){
+            document.getElementById('display').style.display = "block"
+            document.getElementById('create-update').style.display = "none"
+        }
+
+        function populateTable(){
+            //ajax getAll
+           
+            $.ajax({
+                url: 'http://127.0.0.1:5000/profile',
+                method:'GET',
+                dataType: 'JSON',
+                success:function(results){
+                    for (profile of results){
+                        addProfileToTable(profile)
+                    }
+                },
+                error:function (xhr,status,error){
+                    console.log ("error " + error + " code:"+status)
+                }
+            })
+        
+
+        //addProfileToTable(profile)
+        }
+        function addProfileToTable(profile){
+            //console.log("working so far")
+            tableElem = document.getElementById("profileTable")
+            rowElem = tableElem.insertRow(-1)
+            rowElem.setAttribute("id", profile.id)
+            cell1 = rowElem.insertCell(0)
+            cell1.innerHTML = profile.id
+            cell2 = rowElem.insertCell(1)
+            cell2.innerHTML = profile.username
+            cell3 = rowElem.insertCell(2)
+            cell3.innerHTML = profile.email
+            cell4 = rowElem.insertCell(3)
+            cell4.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+            cell5 = rowElem.insertCell(4)
+            cell5.innerHTML = '<button onclick="doDelete(this)">Delete</button>' 
+        }
+        populateTable()
+    </script>
+</body>
+</html>
