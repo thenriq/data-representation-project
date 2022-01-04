@@ -112,8 +112,9 @@
 
         function doCreate(){
             film = getfilmFromForm()
+            host = window.location.origin
             $.ajax({
-                url:"/film",
+                url:host + "/film",
                 data:JSON.stringify(film),
                 method:"POST",
                 dataType:"JSON",
@@ -137,8 +138,10 @@
         }
 
         function updateServer(film){
+            host = window.location.origin
+            newhost = host + '/film/'
             $.ajax({
-                url:'/film/'+film.id,
+                url:newhost + film.id,
                 data:JSON.stringify(film),
                 method:"PUT",
                 dataType:"JSON",
@@ -161,8 +164,10 @@
             var rowElem = thisElem.parentNode.parentNode;
             var index = rowElem.rowIndex;
             id = rowElem.getAttribute("ID");
+            host = window.location.origin
+            newhost = host + '/film/'
             $.ajax({
-                url:"/film/"+id,
+                url:newhost + id,
                 method:"DELETE",
                 dateType:"JSON",
                 success:function(result){
@@ -200,8 +205,10 @@
         }
 
         function populateTable(){
+            host = window.location.origin
+            
             $.ajax({
-                url: 'http://127.0.0.1:5000/film',
+                url: host + '/film',
                 method:'GET',
                 dataType: 'JSON',
                 success:function(results){

@@ -70,7 +70,7 @@
 
         function showUpdate(thisElem){
             var rowElem = thisElem.parentNode.parentNode;
-            console.log(rowElem)
+            
             profile = readProfileFromRow(rowElem)
             populateForm(profile)
             document.getElementById('display').style.display = "none"
@@ -136,8 +136,10 @@
         }
 
         function updateServer(profile){
+            host = window.location.origin
+            newhost = host + "/profile/"
             $.ajax({
-                url:'/profile/'+profile.id,
+                url:newhost + profile.id,
                 data:JSON.stringify(profile),
                 method:"PUT",
                 dataType:"JSON",
@@ -152,7 +154,7 @@
                     console.log("data result: ",data)
                 }
             })
-            console.log(profile.username,profile.email, profile.id)
+            
             addProfileToTable
         }
 
@@ -161,8 +163,10 @@
             var rowElem = thisElem.parentNode.parentNode;
             var index = rowElem.rowIndex;
             id = rowElem.getAttribute("ID");
+            host = window.location.origin
+            newhost = host + "/profile/"
             $.ajax({
-                url:"/profile/"+id,
+                url:newhost+id,
                 method:"DELETE",
                 dateType:"JSON",
                 success:function(result){
@@ -188,7 +192,7 @@
             profile.username = form.querySelector('input[name="username"]').value
             profile.password = form.querySelector('input[name="password"]').value
             profile.email = form.querySelector('input[name="email"]').value
-            console.log(profile)
+            
             return profile
         }
 
@@ -198,8 +202,10 @@
         }
 
         function  populateTable(){
+            host = window.location.origin
+                        
             $.ajax({
-                url: 'http://127.0.0.1:5000/profile',
+                url: host + '/profile',
                 method:'GET',
                 dataType: 'JSON',
                 success:function(results){
