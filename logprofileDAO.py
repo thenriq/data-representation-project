@@ -5,7 +5,7 @@ class LogProfileDAO:
     def __init__(self): 
         self.db = mysql.connector.connect(
         host=cfg.mysql['host'],
-        user=cfg.mysql['username'],
+        user=cfg.mysql['user'],
         password=cfg.mysql['password'],
         database=cfg.mysql['database']
         )

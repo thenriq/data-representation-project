@@ -13,7 +13,7 @@ app = Flask(__name__, static_url_path='', static_folder='.')
 app.secret_key = 'your secret key'
 
 app.config['MYSQL_HOST'] = cfg.mysql['host']
-app.config['MYSQL_USER'] = cfg.mysql['username']
+app.config['MYSQL_USER'] = cfg.mysql['user']
 app.config['MYSQL_PASSWORD'] = cfg.mysql['password']
 app.config['MYSQL_DB'] = cfg.mysql['database']
 
