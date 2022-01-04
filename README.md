@@ -10,3 +10,7 @@ Big Project Data Representation GMIT - Data Analytics
 3. Start the application from application folder by typing in the terminal `python application.py`
 4. Go to the url http://127.0.0.1:5000
 5. The web application will start to run
+
+## Online app
+
+The app is available online on [this link](http://thenriq.pythonanywhere.com/register)
