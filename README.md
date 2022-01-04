@@ -13,4 +13,4 @@ Big Project Data Representation GMIT - Data Analytics
 
 ## Online app
 
-The app is available online on [this link](http://thenriq.pythonanywhere.com/register)
+The app is available online on [this link](http://thenriq.pythonanywhere.com)
