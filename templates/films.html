@@ -16,7 +16,7 @@
 <body>
     <div id="create-update" style="display:none">
         <h2>create-edit</h2>
-        <form action="http://127.0.0.1:5000/films">
+        <form action="films">
             <input type="submit" class="btn btn-primary" value="Back" />
         </form>
         <table class="table col-4 col-sm-3" id="createUpdateForm">
@@ -52,9 +52,13 @@
     <div id="display">
         <h2>Films </h2>
         <button class="mr-1" onclick="showCreate()">Create</button>
-        <form action="http://127.0.0.1:5000/index">
+        <form action="index"> 
+        <!--<form action=windows.location.form>-->
             <input type="submit" class="btn btn-primary" value="Back to Index" />
         </form>
+        
+        <!--<button onclick="document.location='index'" class="btn btn-primary">Back to Index</button>-->
+       
         <table id="filmTable" class="table">
             <tr>
                 <th>ID</th><th>Movie Name</th><th>Gender</th><th>Year</th><th>Box Office</th>
