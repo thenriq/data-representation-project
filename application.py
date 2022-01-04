@@ -6,6 +6,8 @@ import mysql.connector
 import MySQLdb.cursors
 import re
 
+
+
 app = Flask(__name__, static_url_path='', static_folder='staticpages')
 
 app.secret_key = 'your secret key'
