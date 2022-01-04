@@ -110,8 +110,9 @@
 
         function doCreate(){
             profile = getProfileFromForm()
+            host = window.location.origin
             $.ajax({
-                url:"/profile",
+                url: host + "/profile",
                 data:JSON.stringify(profile),
                 method:"POST",
                 dataType:"JSON",
