@@ -8,7 +8,7 @@ import re
 
 
 
-app = Flask(__name__, static_url_path='', static_folder='staticpages')
+app = Flask(__name__, static_url_path='', static_folder='.')
 
 app.secret_key = 'your secret key'
 
@@ -20,13 +20,15 @@ app.config['MYSQL_DB'] = 'datarepresentation'
 mysql = MySQL(app)
  
 # Login page
-@app.route("/index")
+#@app.route("/index")
+@app.route('/')
 def index():
     if 'loggedin' in session: 
         return render_template("index.html")
     return redirect(url_for('login'))
+#app.run()
 
-@app.route('/')
+#@app.route('/')
 @app.route('/login', methods =['GET', 'POST'])
 def login():
     msg = ''
@@ -208,4 +210,4 @@ def deleteFilm(id):
     return jsonify({"done":True})
 
 if __name__ == '__main__' :
-    app.run(debug = True)
+    app.run(debug=True)

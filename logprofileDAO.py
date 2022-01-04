@@ -1,12 +1,13 @@
 import mysql.connector
+import dbconfig as cfg
 class LogProfileDAO:
     db=""
     def __init__(self): 
         self.db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="datarepresentation"
+        host=cfg.mysql['host'],
+        user=cfg.mysql['username'],
+        password=cfg.mysql['password'],
+        database=cfg.mysql['database']
         )
             
     def create(self, login):
