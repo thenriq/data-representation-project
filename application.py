@@ -71,6 +71,11 @@ def fimls():
         return render_template("films.html")
     return redirect(url_for('login'))
 
+# Calls register page to open
+@app.route("/register", methods =['GET', 'POST'])
+def register():
+    return render_template('register.html')
+
 # Load css on page
 @app.route("/profiles")
 def cssfile():
@@ -123,8 +128,8 @@ def update(id):
     if 'username' in request.json:
         currentProfile['username'] = request.json['username']
     
-    #if 'password' in request.json:
-    #   currentProfile['password'] = request.json['password']
+    if 'password' in request.json:
+       currentProfile['password'] = request.json['password']
     
     if 'email' in request.json:
         currentProfile['email'] = request.json['email']
