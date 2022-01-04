@@ -154,36 +154,21 @@
             <div class="two">
                 <h1>Side Bar</h1>
                <ul>
-                    <li>
-                        <form action="http://127.0.0.1:5000/index">
-                            <input type="submit" class="btn btn-success" value="Index" />
-                         </form>
-                    </li>
-                    
-                    <li>
-                        <form action="http://127.0.0.1:5000/profiles">
-                            <input type="submit" class="btn btn-success" value="Profiles" />
-                        </form>
-                    </li>
-                    <li>
-                        <form action="http://127.0.0.1:5000/films">
-                            <input type="submit" class="btn btn-success" value="Films" />
-                        </form>
-                    </li>
-                    <li>
-                        <form action="http://127.0.0.1:5000/logout">
-                            <input type="submit" class="btn btn-success" value="Logout" />
-                        </form>
-                    </li>
+                    <li class="active"><a href="#">Index</a></li>
+                    <li><button class="btn btn-success" onclick="window.open('http://127.0.0.1:5000/profiles','_blank')"> Profiles</button></li>
+                    <li><button class="btn btn-success" onclick="window.open('http://127.0.0.1:5000/films','_blank')"> Films</button></li>
+                    <li><button class="btn btn-success" onclick="window.open('http://127.0.0.1:5000/logout','_blank')"> Logout</button></li>
                 </ul> 
             </div>
             <div class="content" align="center">
                 <div class="topbar">
                     <h2>Welcome!! You are in Index Page!! </h2>                        
                 </div></br></br>
+                <div class="contentbar">
+                   <!--  <div class="msg">#</div> -->
+                </div>  
+                  
             </div>
         </div>
-
     </body>
-    
 </html>

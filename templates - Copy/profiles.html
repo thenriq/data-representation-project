@@ -4,21 +4,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <title>Profiles</title>
+    <title>Document</title>
 </head>
 <body>
     <div id="create-update" style="display:none">
         <h2>create-edit</h2>
-        <form action="http://127.0.0.1:5000/profiles">
-            <input type="submit" class="btn btn-primary" value="Back" />
-        </form>
-        <table class="table col-4 col-sm-3" id="createUpdateForm">
+        <table id="createUpdateForm">
             <tr>
                 <td>ID</td>
                 <td><input type="text" name="id" id="idInput"></td>
@@ -50,9 +43,6 @@
     <div id="display">
         <h2>Profiles </h2>
         <button onclick="showCreate()">Create</button>
-        <form action="http://127.0.0.1:5000/index">
-            <input type="submit" class="btn btn-primary" value="Back to Index" />
-        </form>
         <table id="profileTable" class="table">
             <tr>
                 <th>ID</th><th>Username</th><th>Email</th><th>Password</th><th></th>
@@ -73,6 +63,13 @@
             console.log(rowElem)
             profile = readProfileFromRow(rowElem)
             populateForm(profile)
+            //id = rowElement.getAttribute("id");
+            //profile = readProfileFromRow(rowElement)
+            //populateForm(profile)
+
+            //document.getElementById("id").value = id
+            //document.getElementById("id").disabled = true
+
             document.getElementById('display').style.display = "none"
             document.getElementById('update-button').style.display = "block"
             document.getElementById('create-button').style.display = "none"
@@ -80,7 +77,8 @@
         }
 
         function readProfileFromRow(rowElement){
-                       
+            //id = rowElement.getAttribute("id");
+            
             profile = {}
             profile.id = rowElement.getAttribute("id");
             profile.username = rowElement.cells[1].firstChild.textContent
@@ -88,12 +86,15 @@
             profile.password = rowElement.cells[3].firstChild.textContent
             
             return profile
+            
         }
 
         function populateForm(profile){
             var form = document.getElementById('createUpdateForm')
+
             form.querySelector('input[name="id"]').value = profile.id
             form.querySelector('input[name="id"]').disabled = true
+
             form.querySelector('input[name="username"]').value = profile.username
             form.querySelector('input[name="email"]').value = profile.email
             form.querySelector('input[name="password"]').value = profile.password
@@ -101,6 +102,7 @@
 
         function clearForm(){
             var form = document.getElementById('createUpdateForm')
+
             form.querySelector('input[name="id"]').value = ''
             form.querySelector('input[name="id"]').disabled = false
             form.querySelector('input[name="username"]').value = ''
@@ -108,6 +110,7 @@
         }
 
         function doCreate(){
+            console.log("in doCreate")
             profile = getProfileFromForm()
             $.ajax({
                 url:"/profile",
@@ -116,6 +119,7 @@
                 dataType:"JSON",
                 contentType: "application/json; charset=utf-8",
                 success:function(results){
+                    console.log(results)
                     addProfileToTable(profile)
                     showDisplay()
                     clearForm()
@@ -132,6 +136,7 @@
             updateServer(profile)
             updateTableRow(profile)
             showDisplay()
+            
         }
 
         function updateServer(profile){
@@ -142,6 +147,7 @@
                 dataType:"JSON",
                 contentType: "application/json; charset=utf-8",
                 success:function(result){
+                    console.log(result)
                     updateTableRow(profile)
                     showDisplay()
                     clearForm()
@@ -154,7 +160,6 @@
             console.log(profile.username,profile.email, profile.id)
             addProfileToTable
         }
-
         function doDelete(thisElem){
             var tableElement = document.getElementById('profileTable');
             var rowElem = thisElem.parentNode.parentNode;
@@ -171,6 +176,8 @@
                     console.log(error)
                 }
             })
+            
+
         }
 
         function updateTableRow(profile){
@@ -178,10 +185,15 @@
             rowElem.cells[1].firstChild.textContent = profile.username
             rowElem.cells[2].firstChild.textContent = profile.password
             rowElem.cells[2].firstChild.textContent = profile.email
+            
+            console.log("updating table")
         }
 
         function getProfileFromForm(){
+            console.log("in doCreate")
+            
             var form = document.getElementById('createUpdateForm')
+            
             var profile =  {}
             profile.id = form.querySelector('input[name="id"]').value
             profile.username = form.querySelector('input[name="username"]').value
@@ -197,6 +209,8 @@
         }
 
         function  populateTable(){
+            //ajax getAll
+           
             $.ajax({
                 url: 'http://127.0.0.1:5000/profile',
                 method:'GET',
@@ -210,9 +224,12 @@
                     console.log ("error " + error + " code:"+status)
                 }
             })
-        }
+        
 
+        //addProfileToTable(profile)
+        }
         function addProfileToTable(profile){
+            //console.log("working so far")
             tableElem = document.getElementById("profileTable")
             rowElem = tableElem.insertRow(-1)
             rowElem.setAttribute("id", profile.id)
@@ -224,75 +241,20 @@
             cell3.innerHTML = profile.email
             cell4 = rowElem.insertCell(3)
             cell4.innerHTML = profile.password
+           
+            
+            
+            
+            
             cell5 = rowElem.insertCell(4)
-            cell5.innerHTML = '<button class="btn btn-primary" onclick="showUpdate(this)">Update</button>'
+            cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
             cell6 = rowElem.insertCell(5)
-            cell6.innerHTML = '<button class="btn btn-primary" onclick="doDelete(this)">Delete</button>' 
+            cell6.innerHTML = '<button onclick="doDelete(this)">Delete</button>' 
         }
         populateTable()
     </script>
-
-<footer class="bg-light text-center text-white">
-  <!-- Grid container -->
-  <div class="container p-4 pb-0">
-    <!-- Section: Social media -->
-    <section class="mb-4">
-      <!-- Facebook -->
-      <a
-        class="btn btn-social-icon btn-facebook"
-        style="background-color: #d9e4ec;"
-        href="https://www.facebook.com/thiagoararas"
-        role="button"
-        ><i class="fa fa-facebook fa-lg"></i
-      ></a>
-
-      <!-- Twitter -->
-      <a
-        class="btn btn-social-icon btn-twitter"
-        style="background-color: #d9e4ec;"
-        href="#!"
-        role="button"
-        ><i class="fa fa-twitter fa-lg"></i
-      ></a>
-
-      <!-- Google -->
-      <a
-        class="btn btn-social-icon btn-google"
-        style="background-color: #d9e4ec;"
-        href="#!"
-        role="button"
-        ><i class="fa fa-google-plus fa-lg"></i
-      ></a>
-
-      
-
-      <!-- Linkedin -->
-      <a
-        class="btn btn-social-icon btn-linkedin"
-        style="background-color: #d9e4ec;"
-        href="www.linkedin.com/in/thiago-limait"
-        role="button"
-        ><i class="fa fa-linkedin fa-lg"></i
-      ></a>
-      <!-- Github -->
-      <a
-        class="btn btn-social-icon btn-github"
-        style="background-color: #d9e4ec;"
-        href="https://github.com/thenriq"
-        role="button"
-        ><i class="fa fa-github fa-lg"></i
-      ></a>
-    </section>
-    <!-- Section: Social media -->
-  </div>
-  <!-- Grid container -->
-
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    © 2022 Copyright:
-    <a class="text-white" href="https://github.com/thenriq">Thiago Lima</a>
-  </div>
-  <!-- Copyright -->
-</footer>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
+    <script src="../js/scripts.js"></script>
 </body>
 </html>

@@ -4,22 +4,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Films</title>
 </head>
-
 <body>
     <div id="create-update" style="display:none">
         <h2>create-edit</h2>
-        <form action="http://127.0.0.1:5000/films">
-            <input type="submit" class="btn btn-primary" value="Back" />
-        </form>
-        <table class="table col-4 col-sm-3" id="createUpdateForm">
+        <table id="createUpdateForm">
             <tr>
                 <td>ID</td>
                 <td><input type="text" name="id" id="idInput"></td>
@@ -28,22 +20,25 @@
                 <td>Movie Name</td>
                 <td><input type="text" name="movieName"></td>
             </tr>
+            
             <tr>
                 <td>Gender</td>
                 <td><input type="text" name="gender"></td>
             </tr>
+
             <tr>
                 <td>Year</td>
                 <td><input type="text" name="year"></td>
             </tr>
+
             <tr>
                 <td>Box Office</td>
                 <td><input type="text" name="boxOffice"></td>
             </tr>
            <tr>
                 <td></td><td>
-                    <button id="create-button" class="btn btn-primary" onclick="doCreate()">Create</button>
-                    <button id="update-button" class="btn btn-primary" onclick="doUpdate()">Update</button>
+                    <button id="create-button" onclick="doCreate()">Create</button>
+                    <button id="update-button" onclick="doUpdate()">Update</button>
                 </td>
             </tr>
         </table>
@@ -51,10 +46,7 @@
     
     <div id="display">
         <h2>Films </h2>
-        <button class="mr-1" onclick="showCreate()">Create</button>
-        <form action="http://127.0.0.1:5000/index">
-            <input type="submit" class="btn btn-primary" value="Back to Index" />
-        </form>
+        <button onclick="showCreate()">Create</button>
         <table id="filmTable" class="table">
             <tr>
                 <th>ID</th><th>Movie Name</th><th>Gender</th><th>Year</th><th>Box Office</th>
@@ -72,8 +64,16 @@
 
         function showUpdate(thisElem){
             var rowElem = thisElem.parentNode.parentNode;
+            console.log(rowElem)
             film = readFilmFromRow(rowElem)
             populateForm(film)
+            //id = rowElement.getAttribute("id");
+            //film = readfilmFromRow(rowElement)
+            //populateForm(film)
+
+            //document.getElementById("id").value = id
+            //document.getElementById("id").disabled = true
+
             document.getElementById('display').style.display = "none"
             document.getElementById('update-button').style.display = "block"
             document.getElementById('create-button').style.display = "none"
@@ -81,20 +81,28 @@
         }
 
         function readFilmFromRow(rowElement){
+            //id = rowElement.getAttribute("id");
+            
             film = {}
             film.id = rowElement.getAttribute("id");
             film.movie_name = rowElement.cells[1].firstChild.textContent
             film.movie_gender = rowElement.cells[2].firstChild.textContent 
             film.movie_year = rowElement.cells[3].firstChild.textContent
             film.movie_box_office = rowElement.cells[4].firstChild.textContent
+            
+            
             return film
+            
         }
 
         function populateForm(film){
             var form = document.getElementById('createUpdateForm')
+
             form.querySelector('input[name="id"]').value = film.id
             form.querySelector('input[name="id"]').disabled = true
+
             form.querySelector('input[name="movieName"]').value = film.movie_name
+            
             form.querySelector('input[name="gender"]').value = film.movie_gender
             form.querySelector('input[name="year"]').value = film.movie_year
             form.querySelector('input[name="boxOffice"]').value = film.movie_box_office
@@ -102,6 +110,7 @@
 
         function clearForm(){
             var form = document.getElementById('createUpdateForm')
+
             form.querySelector('input[name="id"]').value = ''
             form.querySelector('input[name="id"]').disabled = false
             form.querySelector('input[name="movieName"]').value = ''
@@ -111,6 +120,7 @@
         }
 
         function doCreate(){
+            
             film = getfilmFromForm()
             $.ajax({
                 url:"/film",
@@ -119,6 +129,7 @@
                 dataType:"JSON",
                 contentType: "application/json; charset=utf-8",
                 success:function(results){
+                    
                     addfilmToTable(film)
                     showDisplay()
                     clearForm()
@@ -127,6 +138,7 @@
                     console.log("error"+error)
                 }
             })
+            //showDisplay()
         }
 
         function doUpdate(){
@@ -134,6 +146,7 @@
             updateServer(film)
             updateTableRow(film)
             showDisplay()
+            
         }
 
         function updateServer(film){
@@ -144,6 +157,7 @@
                 dataType:"JSON",
                 contentType: "application/json; charset=utf-8",
                 success:function(result){
+                    
                     updateTableRow(film)
                     showDisplay()
                     clearForm()
@@ -153,9 +167,9 @@
                     console.log("data result: ",data)
                 }
             })
+            
             addfilmToTable
         }
-
         function doDelete(thisElem){
             var tableElement = document.getElementById('filmTable');
             var rowElem = thisElem.parentNode.parentNode;
@@ -172,6 +186,8 @@
                     console.log(error)
                 }
             })
+            
+
         }
 
         function updateTableRow(film){
@@ -180,10 +196,15 @@
             rowElem.cells[2].firstChild.textContent = film.movie_gender
             rowElem.cells[3].firstChild.textContent = film.movie_year
             rowElem.cells[4].firstChild.textContent = film.movie_box_office
+            
+            
         }
 
         function getfilmFromForm(){
+           
+            
             var form = document.getElementById('createUpdateForm')
+            
             var film =  {}
             film.id = form.querySelector('input[name="id"]').value
             film.movie_name = form.querySelector('input[name="movieName"]').value
@@ -200,6 +221,8 @@
         }
 
         function populateTable(){
+            //ajax getAll
+           
             $.ajax({
                 url: 'http://127.0.0.1:5000/film',
                 method:'GET',
@@ -207,6 +230,8 @@
                 success:function(results){
                     for (film of results){
                         addfilmToTable(film)
+                        
+                        
                     }
                 },
                 
@@ -214,89 +239,38 @@
                     console.log ("error " + error + " code:"+status)
                 }
             })
+        
+
+        //addfilmToTable(film)
         }
         function addfilmToTable(film){
+            
             tableElem = document.getElementById("filmTable")
             rowElem = tableElem.insertRow(-1)
             rowElem.setAttribute("id", film.id)
+           
             cell1 = rowElem.insertCell(0)
             cell1.innerHTML = film.id
+           
             cell2 = rowElem.insertCell(1)
             cell2.innerHTML = film.movie_name
+           
             cell3 = rowElem.insertCell(2)
             cell3.innerHTML = film.movie_gender
+           
             cell4 = rowElem.insertCell(3)
             cell4.innerHTML = film.movie_year
+           
             cell5 = rowElem.insertCell(4)
             cell5.innerHTML = film.movie_box_office
+           
             cell6 = rowElem.insertCell(5)
-            cell6.innerHTML = '<button class="btn btn-primary" onclick="showUpdate(this)">Update</button>'
+            cell6.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+           
             cell7 = rowElem.insertCell(6)
-            cell7.innerHTML = '<button class="btn btn-primary" onclick="doDelete(this)">Delete</button>' 
+            cell7.innerHTML = '<button onclick="doDelete(this)">Delete</button>' 
         }
         populateTable()
     </script>
-    <footer class="bg-light text-center text-white">
-        <!-- Grid container -->
-        <div class="container p-4 pb-0">
-          <!-- Section: Social media -->
-          <section class="mb-4">
-            <!-- Facebook -->
-            <a
-              class="btn btn-social-icon btn-facebook"
-              style="background-color: #d9e4ec;"
-              href="https://www.facebook.com/thiagoararas"
-              role="button"
-              ><i class="fa fa-facebook fa-lg"></i
-            ></a>
-      
-            <!-- Twitter -->
-            <a
-              class="btn btn-social-icon btn-twitter"
-              style="background-color: #d9e4ec;"
-              href="#!"
-              role="button"
-              ><i class="fa fa-twitter fa-lg"></i
-            ></a>
-      
-            <!-- Google -->
-            <a
-              class="btn btn-social-icon btn-google"
-              style="background-color: #d9e4ec;"
-              href="#!"
-              role="button"
-              ><i class="fa fa-google-plus fa-lg"></i
-            ></a>
-      
-            
-      
-            <!-- Linkedin -->
-            <a
-              class="btn btn-social-icon btn-linkedin"
-              style="background-color: #d9e4ec;"
-              href="https://www.linkedin.com/in/thiago-limait"
-              role="button"
-              ><i class="fa fa-linkedin fa-lg"></i
-            ></a>
-            <!-- Github -->
-            <a
-              class="btn btn-social-icon btn-github"
-              style="background-color: #d9e4ec;"
-              href="https://github.com/thenriq"
-              role="button"
-              ><i class="fa fa-github fa-lg"></i
-            ></a>
-          </section>
-          <!-- Section: Social media -->
-        </div>
-        <!-- Grid container -->
-      
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          © 2022 Copyright:
-          <a class="text-white" href="https://github.com/thenriq">Thiago Lima</a>
-        </div>
-        <!-- Copyright -->
-      </footer> 
 </body>
 </html>
