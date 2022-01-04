@@ -109,8 +109,9 @@
 
         function doCreate(){
             profile = getProfileFromForm()
+            host=window.location.origin
             $.ajax({
-                url:"/profile",
+                url:host,
                 data:JSON.stringify(profile),
                 method:"POST",
                 dataType:"JSON",
@@ -270,7 +271,7 @@
       <a
         class="btn btn-social-icon btn-linkedin"
         style="background-color: #d9e4ec;"
-        href="www.linkedin.com/in/thiago-limait"
+        href="https://www.linkedin.com/in/thiago-limait"
         role="button"
         ><i class="fa fa-linkedin fa-lg"></i
       ></a>

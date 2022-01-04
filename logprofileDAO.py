@@ -8,7 +8,6 @@ class LogProfileDAO:
         password="",
         database="datarepresentation"
         )
-    
             
     def create(self, login):
         cursor = self.db.cursor()
@@ -33,9 +32,7 @@ class LogProfileDAO:
         for result in results:
             resultAsDict = self.convertToDictionary(result)
             returnArray.append(resultAsDict)
-
         return returnArray
-    
 
     def findByID(self, id):
         cursor = self.db.cursor()
@@ -59,8 +56,6 @@ class LogProfileDAO:
         values = [id]
         cursor.execute(sql,values)
         result = cursor.fetchone()
-       
-        
         return self.convertToDictionary(result)
 
     def update(self, profile):
@@ -81,29 +76,24 @@ class LogProfileDAO:
         sql="delete from loginprofile where id = %s"
         values = [id]
         cursor.execute(sql, values)
-
         return {}
 
     def convertToDictionary(self, result):
         colnames=['id','username','password','email']
         item = {}
-        
         if result:
             for i, colName in enumerate(colnames):
                 value = result[i]
                 item[colName] = value
-        
         return item
     
     def convertToDictionaryPass(self, result):
         colnames=['password']
         item = {}
-        
         if result:
             for i, colName in enumerate(colnames):
                 value = result[i]
                 item[colName] = value
-        
         return item
         
 logprofileDAO = LogProfileDAO()

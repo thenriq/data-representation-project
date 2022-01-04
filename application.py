@@ -16,12 +16,7 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'datarepresentation'
 
 mysql = MySQL(app)
-  
-# Creating login for application
-#@app.route('/')
-#def index():
-#    return "hello GMIT"
-
+ 
 # Login page
 @app.route("/index")
 def index():
@@ -201,7 +196,7 @@ def updatefilm(id):
   
     
     return jsonify(currentFilm)
-#    return jsonify({})
+
 
 #DELETE: - FILM
 @app.route('/film/<int:id>', methods=['DELETE'])
