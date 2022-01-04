@@ -5,17 +5,17 @@ from flask_mysqldb import MySQL
 import mysql.connector
 import MySQLdb.cursors
 import re
-
+import dbconfig as cfg
 
 
 app = Flask(__name__, static_url_path='', static_folder='.')
 
 app.secret_key = 'your secret key'
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'datarepresentation'
+app.config['MYSQL_HOST'] = cfg.mysql['host']
+app.config['MYSQL_USER'] = cfg.mysql['username']
+app.config['MYSQL_PASSWORD'] = cfg.mysql['password']
+app.config['MYSQL_DB'] = cfg.mysql['database']
 
 mysql = MySQL(app)
  
