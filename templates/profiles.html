@@ -96,7 +96,8 @@
             form.querySelector('input[name="id"]').disabled = true
             form.querySelector('input[name="username"]').value = profile.username
             form.querySelector('input[name="email"]').value = profile.email
-            form.querySelector('input[name="password"]').value = profile.password
+            //form.querySelector('input[name="password"]').value = profile.password
+            form.querySelector('input[name="password"]').value = ''
         }
 
         function clearForm(){
@@ -232,6 +233,7 @@
             cell3.innerHTML = profile.email
             cell4 = rowElem.insertCell(3)
             cell4.innerHTML = profile.password
+            cell4.style.visibility = 'hidden';// this is needed to not show password on table list
             cell5 = rowElem.insertCell(4)
             cell5.innerHTML = '<button class="btn btn-primary" onclick="showUpdate(this)">Update</button>'
             cell6 = rowElem.insertCell(5)
